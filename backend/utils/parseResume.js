@@ -1,4 +1,4 @@
-const pdfParse = require('pdf-parse')
+const { PDFParse } = require('pdf-parse')
 const mammoth = require('mammoth')
 
 function getExt(filename = '') {
@@ -16,8 +16,10 @@ async function extractTextFromBuffer({ buffer, filename, mimetype }) {
     ext === 'docx' || type.includes('officedocument') || type.includes('msword')
 
   if (isPdf) {
-    const parsed = await pdfParse(buffer)
-    return parsed.text || ''
+    // pdf-parse v2 expects a PDFParse instance (it is no longer a function call).
+    const parser = new PDFParse({ data: buffer })
+    const parsed = await parser.getText()
+    return parsed?.text || ''
   }
 
   if (isDocx) {

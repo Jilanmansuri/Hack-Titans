@@ -13,6 +13,13 @@ async function uploadResume(req, res) {
       mimetype: file.mimetype,
     })
 
+    if (!resumeText || !resumeText.trim()) {
+      return res.status(422).json({
+        error:
+          'No extractable text found in this PDF. If it is a scanned/image PDF, try DOCX or paste the resume text instead.',
+      })
+    }
+
     const inferred = inferJobRole(resumeText)
     const exp = inferExperienceLevel(resumeText)
     const extractedSkills = extractSkillsFromText(resumeText, { minLevel: 1 }).slice(0, 15)
