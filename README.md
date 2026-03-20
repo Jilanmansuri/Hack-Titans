@@ -133,7 +133,7 @@ Response:
 ## AI Integration Notes
 
 - By default, the backend uses heuristic skill matching against `backend/data/skills.json`.
-- If you set `AI_PROVIDER=openai` and provide `OPENAI_API_KEY`, the backend will optionally enhance extraction using OpenAI (with a safe fallback if parsing fails).
+- If you set `AI_PROVIDER=openai` and provide `OPENAI_API_KEY`, the backend will optionally enhance extraction using OpenAI.
 
 ## MongoDB (Optional)
 
