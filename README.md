@@ -1,153 +1,265 @@
-# Adaptive Onboarding Engine (Hackathon Full-Stack Demo)
+# SkillForge AI
 
-An AI-powered onboarding web app that:
-1) extracts skills from a resume (PDF/DOCX upload or pasted text),
-2) compares them with a role-based skill database (optionally refined by job description text),
-3) generates a dependency-safe, personalized learning roadmap with a “reasoning trace” explaining why it was created.
+**SkillForge AI** is an AI-powered career growth platform that reads a user's resume or LinkedIn profile, finds missing skills for a target role, builds a personalized learning roadmap, and helps the user practice through an AI mock interview.
 
-## Features
+It is made for students, freshers, and job seekers who do not know **what to learn next**, **where they are lacking**, and **how to prepare smartly for interviews**.
 
-- Resume & Job Description parsing (PDF/DOCX + text)
-- Role selection + predefined skill database (`backend/data/skills.json`)
-- Skill gap analysis (missing vs weak skills)
-- Adaptive roadmap generator (dependency order, grouped into Basics/Intermediate/Advanced)
-- Reasoning trace (“Why this roadmap is generated”)
-- Frontend: React + Tailwind (Upload page + Dashboard timeline)
-- Backend: Node.js + Express API routes:
-  - `/api/upload-resume`
-  - `/api/analyze`
-  - `/api/generate-roadmap`
-- Sample dataset integration (demo resumes + job descriptions)
-- Optional MongoDB persistence (enabled only if `MONGODB_URI` is set)
+---
+
+## What is SkillForge AI?
+
+Most onboarding and learning tools give generic advice.
+
+**SkillForge AI** does something better:
+
+It reads **YOUR** resume, finds **YOUR** exact skill gaps, builds **YOUR** personal roadmap, and then gives you an **AI mock interview based on the skills you are missing**.
+
+### Simple Flow
+
+**Upload Resume / Paste Text / Add LinkedIn URL → Select Target Role → Get Skill Analysis → View AI Roadmap → Practice Interview → Share Results**
+
+---
+
+## Problem Statement
+
+Many students and early professionals want to move into roles like Frontend Developer, Backend Developer, Full Stack Developer, Data Analyst, or AI Engineer, but they face common problems:
+
+- They do not know which skills they already have
+- They do not know which skills are missing for a target role
+- They follow random YouTube tutorials without a proper order
+- They prepare for interviews in a generic way
+- They do not get a clear roadmap based on their own profile
+
+Because of this, people waste time, feel confused, and stay stuck.
+
+---
+
+## Our Solution
+
+**SkillForge AI** solves this by combining resume analysis, skill-gap detection, roadmap generation, and AI interview practice in one platform.
+
+The system:
+
+- extracts skills from a resume or LinkedIn profile
+- compares them with role-based requirements
+- calculates the skill match
+- shows gaps visually
+- generates a week-by-week roadmap
+- explains why that roadmap was created
+- creates mock interview questions based on missing skills
+- gives instant feedback and scoring
+
+This makes career preparation clear, personal, and actionable.
+
+---
+
+## Key Features
+
+### 🧠 AI Skill Extraction
+Automatically detects **50+ technical skills** from uploaded resume files (**PDF/DOCX**) or pasted text using AI. No manual skill entry needed.
+
+### 🎯 Skill Gap Analysis + Radar Chart
+Compares extracted skills against role-specific requirements. A visual radar chart helps users quickly understand strengths and weak areas.
+
+### 🗺️ Adaptive Roadmap Timeline
+Builds a **dependency-safe**, week-by-week roadmap grouped into:
+
+- Basics
+- Intermediate
+- Advanced
+
+The roadmap is personalized according to the user’s current profile and target role.
+
+### 💡 AI Reasoning Trace
+Explains **why** the roadmap was built in that order. Users can see the dependency logic instead of getting a black-box answer.
+
+### 🎤 AI Mock Interview Engine
+Generates interview questions based on the user’s missing skills.  
+This is not generic practice — it is targeted interview preparation.
+
+It also gives feedback and scores on:
+
+- Technical Understanding
+- Communication
+- Confidence
+
+### 🔗 LinkedIn URL Extractor
+Users can paste a LinkedIn profile URL and the system extracts skills using AI. A fallback flow is also supported if direct extraction is limited.
+
+### 📤 Shareable Roadmap Card
+Creates a visual summary card with:
+
+- match score
+- skill stats
+- roadmap phases
+
+Users can download it as PNG or share it.
+
+### 🎨 Premium UI + Animations
+The app includes:
+
+- dark premium theme
+- animated SVG branding
+- smooth loading states
+- animated skill pills
+- radar chart transitions
+- typewriter-style reasoning panel
+
+---
+
+## Why SkillForge AI is Different
+
+Most tools only do one thing.
+
+Some only read resumes.  
+Some only suggest courses.  
+Some only give interview questions.
+
+**SkillForge AI combines the full journey in one place:**
+
+- Analyze current profile
+- Detect missing skills
+- Build roadmap
+- Explain roadmap
+- Practice interview
+- Share progress
+
+This makes it useful, practical, and closer to a real product.
+
+---
+
+## Target Users
+
+SkillForge AI is useful for:
+
+- Students
+- Freshers
+- Final year graduates
+- Career switchers
+- Self-taught developers
+- Job seekers preparing for technical roles
+
+---
+
+## Project Workflow
+
+### Step 1: Upload Resume or Add LinkedIn URL
+The user uploads a resume file or pastes a LinkedIn URL.
+
+### Step 2: AI Extracts Skills
+The backend parses the input and identifies technical skills.
+
+### Step 3: Select Target Role
+The user selects the role they want to prepare for.
+
+### Step 4: Skill Gap Analysis
+The system compares the user’s skills with the required skills for that role.
+
+### Step 5: Visual Dashboard
+The user sees:
+- extracted skills
+- missing skills
+- match percentage
+- radar chart
+
+### Step 6: AI Roadmap Generation
+A personalized roadmap is created with dependency-safe learning order.
+
+### Step 7: AI Mock Interview
+The user practices interview questions based on weak areas.
+
+### Step 8: Share Results
+The user generates a shareable roadmap card.
+
+---
+
+## Tech Stack
+
+### Frontend
+- React
+- TypeScript
+- Vite
+- CSS
+- Chart/Radar visualization libraries
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB (optional / extensible)
+- File upload handling
+- AI integration APIs
+
+### AI / Intelligence Layer
+- Claude AI for:
+  - skill extraction
+  - gap analysis
+  - roadmap generation
+  - reasoning trace
+  - interview feedback
+
+---
 
 ## Folder Structure
 
-- `backend/` (Express API)
-  - `routes/` (API routes)
-  - `controllers/` (route handlers)
-  - `utils/` (resume parsing, skill extraction, gap analysis, roadmap generation)
-  - `data/` (`skills.json`)
-  - `models/` (MongoDB models, optional)
-- `frontend/` (React UI)
-  - `src/pages/` (`UploadPage`, `DashboardPage`)
-  - `src/lib/` (API client)
-  - `src/components/` (optional, kept minimal)
-- `dataset/` (sample resume + job description texts for hackathon demo)
-
-## Setup (Run Locally)
-
-### 1. Prerequisites
-
-- Node.js 18+ (tested with Node 24)
-- npm
-
-### 2. Environment variables
-
-1. Copy `.env.example` to `backend/.env` (backend uses `dotenv` and loads from its working directory).
-2. (Optional) You can also keep a copy of `.env` at the project root, but the backend must be able to read it for AI/Mongo settings.
-
-Recommended flow:
-- Backend: create `backend/.env` (or run with a root `.env` set so `dotenv` can find it).
-- Frontend: during development, Vite proxies `/api` to the backend automatically, so you don't need `VITE_*` variables for the demo.
-
-If you only want a demo without AI keys, keep `AI_PROVIDER=mock`.
-
-### 3. Run backend
-
 ```bash
-cd backend
-npm install
-npm run dev
-```
-
-Backend default URL:
-- `http://localhost:5000`
-- API base: `http://localhost:5000/api`
-
-### 4. Run frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Frontend default URL:
-- `http://localhost:5173`
-
-## API Integration Guide
-
-### `POST /api/upload-resume`
-
-Uploads and parses a resume file (PDF/DOCX).
-
-Request (multipart/form-data):
-- `file` (field name): the uploaded PDF/DOCX
-
-Response:
-- `filename`
-- `resumeText` (extracted raw text)
-- `extractedPreview` (top detected skills)
-- `experienceLevel`
-- `inferredRole`
-
-### `POST /api/analyze`
-
-Computes extracted skills and skill gaps for the selected role.
-
-Request body (JSON):
-- `resumeText` (optional if using sample)
-- `resumeSampleId` (optional; uses `dataset/sample_resumes.json`)
-- `jobDescriptionText` (optional)
-- `jobDescriptionSampleId` (optional; uses `dataset/sample_job_descriptions.json`)
-- `role` (required for best results; one of:
-  `Full Stack Developer`, `Frontend Developer`, `Backend Developer`, `Data Analyst`)
-
-Response:
-- `analysisId`
-- `extractedSkills`
-- `requiredSkills`
-- `gaps.missingSkills` and `gaps.weakSkills`
-- `reasoningTrace` (“why these gaps were detected”)
-
-### `POST /api/generate-roadmap`
-
-Generates the adaptive learning roadmap from an analysis.
-
-Request body (JSON):
-- `analysisId` (preferred)
-- `role`
-- `gaps` (missing/weak) (included by frontend; controller can also re-use stored analysis)
-
-Response:
-- `roadmap`: timeline steps (Basics/Intermediate/Advanced)
-- `reasoningTrace`: “Why this roadmap is generated”
-
-### Sample dataset endpoints
-
-- `GET /api/samples/resumes` -> list of resume samples
-- `GET /api/samples/resumes/:id` -> get a specific sample resume text
-- `GET /api/samples/job-descriptions` -> list of JD samples
-- `GET /api/samples/job-descriptions/:id` -> get a specific JD sample text
-
-## AI Integration Notes
-
-- By default, the backend uses heuristic skill matching against `backend/data/skills.json`.
-- If you set `AI_PROVIDER=openai` and provide `OPENAI_API_KEY`, the backend will optionally enhance extraction using OpenAI.
-
-## MongoDB (Optional)
-
-- If `MONGODB_URI` is provided, analysis payloads are persisted via Mongoose.
-- If not set, the app continues in in-memory mode (sufficient for hackathon demos).
-
-## Demo Checklist (Hackathon)
-
-1. Open the frontend.
-2. Pick a role (e.g., `Full Stack Developer`).
-3. Choose a sample resume (or upload PDF/DOCX, or paste text).
-4. Click `Analyze & Generate Roadmap`.
-5. Review:
-   - extracted skills
-   - missing/weak gaps
-   - timeline roadmap
-   - reasoning trace
+SkillForge-AI/
+│
+├── backend/                              # Express API Server
+│   ├── controllers/                      # Route handlers
+│   │   ├── analyzeController.js          # Skill extraction + gap analysis
+│   │   ├── roadmapController.js          # Roadmap generation
+│   │   ├── sampleController.js           # Sample data serving
+│   │   └── uploadController.js           # Resume file upload + parsing
+│   │
+│   ├── src/
+│   │   ├── controllers/
+│   │   │   └── linkedinController.js     # LinkedIn URL skill extraction
+│   │   └── routes/
+│   │       ├── api.js                    # Main API routes
+│   │       ├── interview.js              # Mock interview routes
+│   │       └── linkedin.js               # LinkedIn routes
+│   │
+│   ├── data/
+│   │   └── skills.json                   # Role-based skill database
+│   │
+│   ├── models/
+│   │   └── Analysis.js                   # MongoDB model (optional)
+│   │
+│   ├── utils/                            # Helper utilities
+│   ├── uploads/                          # Temp file storage
+│   ├── server.js                         # Express app entry point
+│   ├── .env                              # Environment variables
+│   └── package.json
+│
+├── frontend/                             # React + Vite App
+│   ├── src/
+│   │   ├── components/                   # Reusable UI components
+│   │   │   ├── InterviewPanel.tsx        # AI Mock Interview UI
+│   │   │   ├── LoadingOverlay.tsx        # Animated loading stages
+│   │   │   ├── RadarChartComponent.tsx   # Skill gap radar chart
+│   │   │   ├── ReasoningPanel.tsx        # AI reasoning trace
+│   │   │   ├── RoleCard.tsx              # Role selection cards
+│   │   │   ├── ShareModal.tsx            # Shareable roadmap card
+│   │   │   ├── SkillPill.tsx             # Skill tag component
+│   │   │   └── Timeline.tsx              # Roadmap timeline
+│   │   │
+│   │   ├── lib/
+│   │   │   └── api.ts                    # API client + all fetch calls
+│   │   │
+│   │   ├── pages/                        # Page components
+│   │   │   (UploadPage + DashboardPage)
+│   │   │
+│   │   ├── App.tsx                       # Root component + routing
+│   │   ├── App.css
+│   │   ├── index.css                     # Global styles + animations
+│   │   └── main.tsx                      # React entry point
+│   │
+│   ├── index.html                        # App shell + tab title
+│   ├── vite.config.ts                    # Vite + API proxy config
+│   └── package.json
+│
+├── dataset/                              # Sample data for demo
+│   (sample resumes + job descriptions)
+│
+├── .env.example                          # Environment template
+└── README.md

@@ -10,6 +10,12 @@ export default function UploadPage() {
   const [jobDescription, setJobDescription] = useState('');
   const [selectedRole, setSelectedRole] = useState('Full Stack Developer');
   
+  const [inputTab, setInputTab] = useState<'upload' | 'paste' | 'linkedin'>('upload');
+  const [linkedinUrl, setLinkedinUrl] = useState('');
+  const [extracting, setExtracting] = useState(false);
+  const [linkedinSkills, setLinkedinSkills] = useState<string[]>([]);
+  const [linkedinDemoMode, setLinkedinDemoMode] = useState(false);
+
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   
@@ -63,6 +69,28 @@ export default function UploadPage() {
       }
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const handleLinkedInExtract = async () => {
+    if (!linkedinUrl) return;
+    setExtracting(true);
+    setLinkedinDemoMode(false);
+    try {
+      const res = await fetch('http://localhost:5000/api/linkedin/extract', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: linkedinUrl })
+      });
+      const data = await res.json();
+      setLinkedinSkills(data.extractedSkills || []);
+      setResumeText(data.profileText || '');
+      if (data.demo) setLinkedinDemoMode(true);
+    } catch (err) {
+      console.error(err);
+      alert('Could not fetch LinkedIn profile. Try pasting text instead.');
+    } finally {
+      setExtracting(false);
     }
   };
 
@@ -138,6 +166,38 @@ export default function UploadPage() {
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left Column - Hero */}
       <div className="w-full md:w-5/12 p-8 md:p-16 flex flex-col justify-start border-b md:border-b-0 md:border-r border-[#222]">
+        
+        {/* Brand Logo */}
+        <div className="mb-12 md:mb-20" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+            <style>{`
+              .hx { stroke-dasharray: 120; stroke-dashoffset: 120; animation: dh 0.8s ease forwards; }
+              .bt { stroke-dasharray: 40; stroke-dashoffset: 40; animation: db 0.5s ease forwards 0.7s; }
+              @keyframes dh { to { stroke-dashoffset: 0; } }
+              @keyframes db { to { stroke-dashoffset: 0; } }
+            `}</style>
+            <polygon className="hx"
+              points="18,2 32,10 32,26 18,34 4,26 4,10"
+              fill="#6366F1" fillOpacity="0.15"
+              stroke="#6366F1" strokeWidth="1.5"
+            />
+            <path className="bt"
+              d="M21 8L14 18H20L15 28"
+              stroke="#6366F1" strokeWidth="2.2"
+              strokeLinecap="round" strokeLinejoin="round" fill="none"
+            />
+          </svg>
+          <div>
+            <div style={{ fontSize: '17px', fontWeight: 800, color: '#F9FAFB', letterSpacing: '-0.5px', lineHeight: 1.1 }}>
+              Skill<span style={{ color: '#6366F1' }}>Forge</span>
+              <span style={{ color: '#06B6D4', fontSize: '11px', fontWeight: 700, marginLeft: '4px', letterSpacing: '1px' }}>AI</span>
+            </div>
+            <div style={{ fontSize: '10px', color: '#4B5563', fontWeight: 500, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+              Career Accelerator
+            </div>
+          </div>
+        </div>
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
           
           {/* Heading */}
@@ -309,44 +369,208 @@ export default function UploadPage() {
               <span className="w-8 h-8 rounded bg-indigo-500 text-white flex items-center justify-center text-sm">1</span>
               Your Resume
             </h2>
-            
-            <div 
-              className={`w-full p-8 border-2 border-dashed rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 ${isDragging ? 'border-indigo-500 bg-indigo-500/5' : 'border-[#333] hover:border-[#6366F1] hover:bg-[#111]'}`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <UploadCloud className={`w-10 h-10 mb-4 ${isDragging ? 'text-indigo-400' : 'text-gray-500'}`} />
-              {file ? (
-                <div className="text-emerald-400 font-semibold">{file.name} ({(file.size / 1024).toFixed(1)} KB)</div>
-              ) : (
-                <>
-                  <p className="font-semibold text-white mb-2">Drop resume here or click to browse</p>
-                  <p className="text-sm text-gray-500">Accepts PDF / DOCX</p>
-                </>
-              )}
-              <input type="file" className="hidden" ref={fileInputRef} onChange={handleFileSelect} accept=".pdf,.docx" />
-            </div>
 
-            <div className="flex items-center my-6">
-              <div className="flex-1 h-px bg-[#222]"></div>
-              <span className="px-4 text-xs font-bold text-gray-600 uppercase">OR</span>
-              <div className="flex-1 h-px bg-[#222]"></div>
-            </div>
-
-            <textarea 
-              className="w-full h-32 bg-[#111] border border-[#222] rounded-xl p-4 text-white placeholder-gray-600 focus:outline-none focus:border-indigo-500 transition-colors"
-              placeholder="Paste your resume text here..."
-              value={resumeText}
-              onChange={(e) => setResumeText(e.target.value)}
-            />
-
-            <div className="mt-4 flex justify-end">
-              <button onClick={loadSampleResume} className="btn-ghost text-xs py-1.5 flex items-center gap-2">
-                <FileText className="w-3 h-3" /> Load Sample Resume
+            {/* Input Tabs */}
+            <div className="flex bg-[#111] p-1 rounded-lg mb-6 border border-[#222]">
+              <button 
+                onClick={() => setInputTab('upload')}
+                className={`flex-1 py-2 text-sm font-semibold rounded-md transition-colors ${inputTab === 'upload' ? 'bg-[#222] text-white' : 'text-gray-500 hover:text-gray-300'}`}
+              >
+                📄 Upload
+              </button>
+              <button 
+                onClick={() => setInputTab('paste')}
+                className={`flex-1 py-2 text-sm font-semibold rounded-md transition-colors ${inputTab === 'paste' ? 'bg-[#222] text-white' : 'text-gray-500 hover:text-gray-300'}`}
+              >
+                ✏️ Paste Text
+              </button>
+              <button 
+                onClick={() => setInputTab('linkedin')}
+                className={`flex-1 py-2 text-sm font-semibold rounded-md transition-colors ${inputTab === 'linkedin' ? 'bg-[#222] text-white' : 'text-gray-500 hover:text-gray-300'}`}
+              >
+                🔗 LinkedIn
               </button>
             </div>
+            
+            {inputTab === 'upload' && (
+              <div 
+                className={`w-full p-8 border-2 border-dashed rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 ${isDragging ? 'border-indigo-500 bg-indigo-500/5' : 'border-[#333] hover:border-[#6366F1] hover:bg-[#111]'}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <UploadCloud className={`w-10 h-10 mb-4 ${isDragging ? 'text-indigo-400' : 'text-gray-500'}`} />
+                {file ? (
+                  <div className="text-emerald-400 font-semibold">{file.name} ({(file.size / 1024).toFixed(1)} KB)</div>
+                ) : (
+                  <>
+                    <p className="font-semibold text-white mb-2">Drop resume here or click to browse</p>
+                    <p className="text-sm text-gray-500">Accepts PDF / DOCX</p>
+                  </>
+                )}
+                <input type="file" className="hidden" ref={fileInputRef} onChange={handleFileSelect} accept=".pdf,.docx" />
+              </div>
+            )}
+
+            {inputTab === 'paste' && (
+              <div className="space-y-4">
+                <textarea 
+                  className="w-full h-32 bg-[#111] border border-[#222] rounded-xl p-4 text-white placeholder-gray-600 focus:outline-none focus:border-indigo-500 transition-colors"
+                  placeholder="Paste your resume text here..."
+                  value={resumeText}
+                  onChange={(e) => setResumeText(e.target.value)}
+                />
+                <div className="mt-4 flex justify-end">
+                  <button onClick={loadSampleResume} className="btn-ghost text-xs py-1.5 flex items-center gap-2">
+                    <FileText className="w-3 h-3" /> Load Sample Resume
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {inputTab === 'linkedin' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {/* Header */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  padding: '14px 16px',
+                  background: '#0A66C2' + '15',
+                  border: '1px solid #0A66C2' + '30',
+                  borderRadius: '10px'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#0A66C2">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                    <rect x="2" y="9" width="4" height="12"/>
+                    <circle cx="4" cy="4" r="2"/>
+                  </svg>
+                  <div>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#F9FAFB' }}>
+                      Import from LinkedIn
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#6B7280' }}>
+                      AI extracts your skills automatically
+                    </div>
+                  </div>
+                </div>
+
+                {/* URL Input */}
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="url"
+                    placeholder="https://linkedin.com/in/your-profile"
+                    value={linkedinUrl}
+                    onChange={e => setLinkedinUrl(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '14px 16px 14px 44px',
+                      background: '#111111',
+                      border: `1px solid ${linkedinUrl ? '#6366F1' : '#222222'}`,
+                      borderRadius: '10px',
+                      color: '#F9FAFB',
+                      fontSize: '14px',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                      transition: 'border-color 200ms ease'
+                    }}
+                  />
+                  <svg style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }}
+                       width="16" height="16" viewBox="0 0 24 24" fill="none"
+                       stroke="#6B7280" strokeWidth="2" strokeLinecap="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                  </svg>
+                </div>
+
+                {/* Extract Button */}
+                <button
+                  onClick={handleLinkedInExtract}
+                  disabled={!linkedinUrl || extracting}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    background: linkedinUrl ? '#0A66C2' : '#1F1F1F',
+                    border: 'none',
+                    borderRadius: '10px',
+                    color: linkedinUrl ? '#FFFFFF' : '#4B5563',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    cursor: linkedinUrl ? 'pointer' : 'not-allowed',
+                    transition: 'all 200ms ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px'
+                  }}>
+                  {extracting ? (
+                    <>
+                      <div className="animate-spin" style={{
+                        width: '14px', height: '14px',
+                        border: '2px solid #ffffff40',
+                        borderTop: '2px solid #fff',
+                        borderRadius: '50%'
+                      }} />
+                      Extracting Skills...
+                    </>
+                  ) : (
+                    <>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 1 1-.49-7.49"/>
+                      </svg>
+                      Extract Skills from LinkedIn
+                    </>
+                  )}
+                </button>
+
+                {/* Success State */}
+                {linkedinSkills.length > 0 && (
+                  <div style={{
+                    padding: '14px 16px',
+                    background: '#10B981' + '10',
+                    border: '1px solid #10B981' + '30',
+                    borderRadius: '10px'
+                  }}>
+                    <div style={{
+                      fontSize: '12px', fontWeight: 700,
+                      color: '#10B981', marginBottom: '10px'
+                    }}>
+                      ✓ {linkedinSkills.length} Skills Extracted
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                      {linkedinSkills.map((skill, i) => (
+                        <span key={i} style={{
+                          padding: '4px 10px',
+                          background: '#6366F1' + '15',
+                          border: '1px solid #6366F1' + '30',
+                          borderRadius: '20px',
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          color: '#818CF8'
+                        }}>
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {linkedinDemoMode && (
+                  <div style={{
+                    padding: '10px 14px',
+                    background: '#F59E0B' + '15',
+                    border: '1px solid #F59E0B' + '30',
+                    borderRadius: '8px',
+                    fontSize: '12px',
+                    color: '#F59E0B',
+                    marginTop: '8px'
+                  }}>
+                    ⚠️ LinkedIn blocked direct access — using demo skills. For best results, paste your LinkedIn About section text instead.
+                  </div>
+                )}
+              </div>
+            )}
           </section>
 
           {/* Step 2 */}
