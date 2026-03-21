@@ -1,18 +1,8 @@
-[
-  {
-    "id": "resume_react_node_4y",
-    "title": "React + Node (4 years)",
-    "text": "Full stack engineer with 4 years of experience. Built production web apps using React, Redux, and TypeScript. Developed REST APIs with Node.js and Express. Worked with MongoDB (Mongoose) and implemented JWT authentication. Familiar with Jest and React Testing Library.\n\nSkills: JavaScript, TypeScript, React, Redux, Node.js, Express, REST APIs, MongoDB, JWT, Jest."
-  },
-  {
-    "id": "resume_python_sql_2y",
-    "title": "Python + SQL (2 years)",
-    "text": "Data analyst with 2 years of experience. Strong in SQL and Python. Used pandas for data cleaning and analysis. Applied statistics for hypothesis testing and built dashboards in Tableau. Implemented machine learning workflows with scikit-learn and handled missing values and outliers.\n\nSkills: SQL, Python, Pandas, Statistics, Tableau, Data Cleaning, Machine Learning."
-  },
-  {
-    "id": "resume_frontend_1y",
-    "title": "Frontend (1 year)",
-    "text": "Entry-level frontend developer. 1 year of experience building responsive interfaces with HTML, CSS, and JavaScript. Learned React basics and used hooks to manage component state. Built small apps that fetch data from REST endpoints.\n\nSkills: HTML, CSS, JavaScript, React, Hooks, API calls."
+{
+  "resumes": {
+    "Full Stack Developer": "Experienced Full Stack Developer with 4 years of experience building scalable web applications. Proficient in JavaScript, React, and Node.js. Experience with REST APIs, MongoDB, and Git. Familiar with basic Linux commands.",
+    "Frontend Developer": "Frontend Engineer specializing in React and Tailwind CSS. Have built responsive UIs using HTML, CSS, JavaScript. Basic knowledge of TypeScript and UI/UX testing.",
+    "Backend Developer": "Backend wizard with strong skills in Node.js, Express, and PostgreSQL. Created microservices using Docker. Strong background in REST APIs and system design.",
+    "Data Analyst": "Data enthusiast with deep knowledge in Python, SQL, and Pandas. Experience building dashboards in Tableau and PowerBI. Familiar with basic Machine Learning concepts."
   }
-]
-
+}

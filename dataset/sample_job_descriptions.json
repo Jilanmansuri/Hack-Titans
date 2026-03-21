@@ -1,18 +1,8 @@
-[
-  {
-    "id": "jd_fullstack",
-    "title": "Full Stack Developer",
-    "text": "We are looking for a Full Stack Developer. Must have experience with Node.js, Express, REST APIs, MongoDB, JWT authentication, React, TypeScript, and testing (Jest). Bonus: React hooks and Redux."
-  },
-  {
-    "id": "jd_frontend",
-    "title": "Frontend Developer",
-    "text": "Frontend role focused on React with TypeScript, hooks, API integration (fetch/axios), and testing using Jest or Testing Library."
-  },
-  {
-    "id": "jd_data_analyst",
-    "title": "Data Analyst",
-    "text": "Data Analyst responsible for SQL queries, Python and pandas, statistical analysis, data visualization with Tableau, data cleaning/preprocessing, and basic machine learning using scikit-learn."
+{
+  "jobs": {
+    "Full Stack Developer": "Looking for a seasoned Full Stack Developer. Must have deep expertise in React, MongoDB, Express, and Node.js. Bonus points for AWS, Docker, and TypeScript.",
+    "Frontend Developer": "UI/UX focused Frontend Developer. Tech stack: React, TypeScript, Redux, Node.js (basics), and TailwindCSS. Experience with Framer Motion expected.",
+    "Backend Developer": "We need a robust Backend Developer. Focus primarily on Node.js, Express, PostgreSQL, Redis, and System Design patterns. Docker experience is required.",
+    "Data Analyst": "Seeking a Data Analyst Data Scientist hybrid. Requirements: Python, SQL, Tableau, Pandas, and Advanced Statistics. R or Machine Learning is a plus."
   }
-]
-
+}
