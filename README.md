@@ -1,4 +1,4 @@
-# SkillForge AI
+# SkillForge AI 
 
 **SkillForge AI** is an AI-powered career growth platform that reads a user's resume or LinkedIn profile, finds missing skills for a target role, builds a personalized learning roadmap, and helps the user practice through an AI mock interview.
 
